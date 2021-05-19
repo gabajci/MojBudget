@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".nastavenia">
+    tools:context=".Nastavenia">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/textVymaz"
             android:layout_width="166dp"
             android:layout_height="22dp"
             android:background="#CA4A4A"
@@ -23,29 +23,18 @@
             app:layout_constraintHorizontal_bias="0.499"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.118" />
+            app:layout_constraintVertical_bias="0.367" />
 
         <Switch
-            android:id="@+id/switch1"
+            android:id="@+id/switchNightMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nočný režim"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5"
-            app:layout_constraintVertical_bias="0.075" />
+            app:layout_constraintTop_toBottomOf="@+id/textVymaz"
+            app:layout_constraintVertical_bias="0.194" />
 
-        <Switch
-            android:id="@+id/switch2"
-            android:layout_width="125dp"
-            android:layout_height="29dp"
-            android:text="Notifikácie"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch1"
-            app:layout_constraintVertical_bias="0.106" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

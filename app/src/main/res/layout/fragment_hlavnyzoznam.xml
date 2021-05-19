@@ -9,7 +9,7 @@
 
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textPortfolio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -22,7 +22,7 @@
         app:layout_constraintVertical_bias="0.002" />
 
     <TextView
-        android:id="@+id/sumaDokopy"
+        android:id="@+id/textPortfolioSuma"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -34,24 +34,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textPortfolio"
         app:layout_constraintVertical_bias="0.0" />
 
     <ListView
-        android:id="@+id/list"
+        android:id="@+id/listPoloziek"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:stackFromBottom="true"
         android:transcriptMode="normal"
-        app:layout_constraintBottom_toTopOf="@+id/ppridaj"
+        app:layout_constraintBottom_toTopOf="@+id/floatbtnPridaj"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sumaDokopy"
+        app:layout_constraintTop_toBottomOf="@+id/textPortfolioSuma"
         app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/ppridaj"
+        android:id="@+id/floatbtnPridaj"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"

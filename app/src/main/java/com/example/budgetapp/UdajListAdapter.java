@@ -9,13 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class UdajListAdapter extends ArrayAdapter<Udaj> {
         private static final String TAG ="UdajListAdapter";
@@ -40,18 +35,18 @@ public class UdajListAdapter extends ArrayAdapter<Udaj> {
         LayoutInflater inflater =LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource,parent,false);
 
-        TextView Tdatum =(TextView)convertView.findViewById(R.id.textView);
-        TextView Tsuma =(TextView)convertView.findViewById(R.id.textView2);
-        TextView Tpozn =(TextView)convertView.findViewById(R.id.textView3);
+        TextView Tdatum =(TextView)convertView.findViewById(R.id.textDatum);
+        TextView Tsuma =(TextView)convertView.findViewById(R.id.textSumaA);
+        TextView Tpozn =(TextView)convertView.findViewById(R.id.textPoznamkaA);
 
-        float sumaFl= Float.parseFloat(suma);
+        float sumaFloat= Float.parseFloat(suma);
 
-        if(sumaFl>0)
+        if(sumaFloat>0)
         {
             Tsuma.setBackgroundColor(0xFFB5E3AB);
             Tdatum.setBackgroundColor(0xFFB5E3AB);
             Tpozn.setBackgroundColor(0xFFB5E3AB);
-        } else if(sumaFl<0)
+        } else if(sumaFloat<0)
         {
             Tsuma.setBackgroundColor(Color.parseColor("#F5A9A9"));
             Tdatum.setBackgroundColor(Color.parseColor("#F5A9A9"));

@@ -5,15 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".secondFragment">
+    tools:context=".PridajPolozku">
 
     <EditText
-        android:id="@+id/SumaNaPridanie"
+        android:id="@+id/editTSumaPridanie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="numberDecimal"
-        app:layout_constraintBottom_toTopOf="@+id/poznamka"
+        app:layout_constraintBottom_toTopOf="@+id/editTPozn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.865"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.674" />
 
     <Button
-        android:id="@+id/zmena"
+        android:id="@+id/btnPridaj"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pridaj"
@@ -33,7 +33,7 @@
         app:layout_constraintVertical_bias="0.499" />
 
     <EditText
-        android:id="@+id/poznamka"
+        android:id="@+id/editTPozn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -47,19 +47,19 @@
         app:layout_constraintVertical_bias="0.379" />
 
     <RadioGroup
-        android:id="@+id/radiog"
+        android:id="@+id/rgZnamienko"
         android:layout_width="102dp"
         android:layout_height="95dp"
-        android:checkedButton="@id/radioButton3"
+        android:checkedButton="@id/rbVydajA"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/SumaNaPridanie"
+        app:layout_constraintEnd_toStartOf="@+id/editTSumaPridanie"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.207">
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/rbPrijemA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Príjem"
@@ -68,7 +68,7 @@
             android:buttonTint="@color/mygreen"/>
 
         <RadioButton
-            android:id="@+id/radioButton3"
+            android:id="@+id/rbVydajA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="false"
@@ -80,35 +80,35 @@
     </RadioGroup>
 
     <Spinner
-        android:id="@+id/spinner3"
+        android:id="@+id/spinnerKategoria"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/poznamka"
+        app:layout_constraintEnd_toStartOf="@+id/editTPozn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radiog"
+        app:layout_constraintTop_toBottomOf="@+id/rgZnamienko"
         app:layout_constraintVertical_bias="0.104" />
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/textPoznamka"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:text="Poznámka"
-        app:layout_constraintBottom_toTopOf="@+id/poznamka"
+        app:layout_constraintBottom_toTopOf="@+id/editTPozn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.721"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SumaNaPridanie"
+        app:layout_constraintTop_toBottomOf="@+id/editTSumaPridanie"
         app:layout_constraintVertical_bias="0.969" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/textSuma"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:text="Suma"
-        app:layout_constraintBottom_toTopOf="@+id/SumaNaPridanie"
+        app:layout_constraintBottom_toTopOf="@+id/editTSumaPridanie"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.693"
         app:layout_constraintStart_toStartOf="parent"

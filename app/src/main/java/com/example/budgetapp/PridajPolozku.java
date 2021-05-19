@@ -1,24 +1,15 @@
 package com.example.budgetapp;
 
 import android.app.Activity;
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,60 +18,46 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 import static com.example.budgetapp.MainFragment.PREFS_NAME;
 
-public class secondFragment extends Fragment{
+public class PridajPolozku extends Fragment{
+
+    private View view;
 
     private SharedPreferences udajeUzivatela;
     private SharedPreferences.Editor editujUdaje;
-    private ArrayList<Udaj> udaje = new ArrayList<Udaj>();
 
+    private EditText editTSumaNaPr;
+    private EditText editTPoznamka;
+    private Spinner spinnerKategorii;
+    private Button btnPridaj;
+    private RadioButton radioBtnPrijem;
 
-    private Activity activity;
-    private EditText sumaNaPridanie;
-    private EditText poznamka;
-    private Spinner spin;
-    private Button zmena;
-    private View view;
-    private RadioButton prijem;
+    private float sumaPredPrevratenim;
 
-    public static secondFragment newInstance(String param1, String param2) {
-        secondFragment fragment = new secondFragment();
+    public static PridajPolozku newInstance(String param1, String param2) {
+        PridajPolozku fragment = new PridajPolozku();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public secondFragment() {
+    public PridajPolozku() {
         // Required empty public constructor
     }
 
@@ -102,57 +79,66 @@ public class secondFragment extends Fragment{
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
-        if(id == R.id.item2)
+        if(id == R.id.itemPolozky)
         {
             hideSoftKeyboard(getActivity());
-            sumaNaPridanie.setText("");
-            poznamka.setText("");
+            editTSumaNaPr.setText("");
+            editTPoznamka.setText("");
             Navigation.findNavController(view).navigate(R.id.action_secondFragment_to_mainFragment);
 
-        } else if(id == R.id.item1)
+        } else if(id == R.id.itemNastavenia)
         {
             hideSoftKeyboard(getActivity());
-            sumaNaPridanie.setText("");
-            poznamka.setText("");
+            editTSumaNaPr.setText("");
+            editTPoznamka.setText("");
             Navigation.findNavController(view).navigate(R.id.action_secondFragment_to_nastavenia);
-        } else if(id == R.id.item3)
+        } else if(id == R.id.itemGraf)
         {
             hideSoftKeyboard(getActivity());
-            sumaNaPridanie.setText("");
-            poznamka.setText("");
+            editTSumaNaPr.setText("");
+            editTPoznamka.setText("");
             Navigation.findNavController(view).navigate(R.id.action_secondFragment_to_statistika);
         }
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(((MainActivity)getActivity()).getSuma()!=null) {
+            outState.putFloat("suma", ((MainActivity) getActivity()).getSuma());
+        } else {
+            outState.putFloat("suma", sumaPredPrevratenim);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_second, container, false);
+        view = inflater.inflate(R.layout.fragment_pridajpolozku, container, false);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
+        editTSumaNaPr=view.findViewById(R.id.editTSumaPridanie);
+        editTPoznamka=view.findViewById(R.id.editTPozn);
+        btnPridaj=view.findViewById(R.id.btnPridaj);
+        radioBtnPrijem = view.findViewById(R.id.rbPrijemA);
+        spinnerKategorii = view.findViewById(R.id.spinnerKategoria);
 
-        sumaNaPridanie=view.findViewById(R.id.SumaNaPridanie);
-        poznamka=view.findViewById(R.id.poznamka);
-        zmena=view.findViewById(R.id.zmena);
-        prijem = view.findViewById(R.id.radioButton2);
-        spin = view.findViewById(R.id.spinner3);
-        setSpinner();
-
-        udaje=((MainActivity)getActivity()).getUdaje();
-
-
-        zmena.setOnClickListener(new View.OnClickListener() {
+        btnPridaj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonZmena();
+                buttonPridaj();
             }
         });
 
+        if(savedInstanceState!= null)
+        {
+            this.sumaPredPrevratenim=savedInstanceState.getFloat("suma");
+        }
+
+        setSpinner();
         checkNightMode();
         return view;
     }
@@ -162,63 +148,42 @@ public class secondFragment extends Fragment{
                 "Nezaradené","Výplata","Poplatky","Jedlo","Investície","Voľný čas",
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, items);
-        spin.setAdapter(adapter);
+        spinnerKategorii.setAdapter(adapter);
     }
 
-    public void checkNightMode()
-    {
-        udajeUzivatela = this.getActivity().getSharedPreferences(PREFS_NAME,0);
-        editujUdaje = udajeUzivatela.edit();
-        String akyRezim = "";
-        akyRezim = udajeUzivatela.getString("rezim",akyRezim);
-
-        if(akyRezim.equals("n")) {
-            view.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.nightmode));
-        }
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        this.activity = getActivity();
-    }
-
-    public void buttonZmena(){
-        if(!sumaNaPridanie.getText().toString().isEmpty()) {
-
+    public void buttonPridaj(){
+        if(!editTSumaNaPr.getText().toString().isEmpty()) {
             String minus="";
-            if(!prijem.isChecked()){
+            if(!radioBtnPrijem.isChecked()){
                 minus = "-";
             }
 
-            String kategoria = spin.getSelectedItem().toString()+";";
-            String poznam = kategoria+poznamka.getText().toString()+"\n";
+            String kategoria = spinnerKategorii.getSelectedItem().toString()+";";
+            String poznam = kategoria+editTPoznamka.getText().toString()+"\n";
             String datum = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date())+"\n";
 
             float portfolio = 0;
-            portfolio = ((MainActivity)getActivity()).getSuma();
-
-            if(!prijem.isChecked()){
-                portfolio -= Float.parseFloat(sumaNaPridanie.getText().toString());
+            if(((MainActivity)getActivity()).getSuma()!=null) {
+                portfolio =((MainActivity)getActivity()).getSuma();
             } else {
-                portfolio+= Float.parseFloat(sumaNaPridanie.getText().toString());
+                portfolio = sumaPredPrevratenim;
             }
 
-            String suma=minus+sumaNaPridanie.getText().toString()+"\n";
+            if(!radioBtnPrijem.isChecked()){
+                portfolio -= Float.parseFloat(editTSumaNaPr.getText().toString());
+            } else {
+                portfolio+= Float.parseFloat(editTSumaNaPr.getText().toString());
+            }
 
-            udaje= ((MainActivity)getActivity()).getUdaje();
-
+            String suma=minus+editTSumaNaPr.getText().toString()+"\n";
 
             saveUdaje(datum,suma,poznam);
-            udaje.add(new Udaj(datum,suma,poznam));
-            ((MainActivity)getActivity()).setUdaje(this.udaje);
-
             saveSuma(String.valueOf(portfolio));
+
             ((MainActivity)getActivity()).setSuma(portfolio);
 
-            editujUdaje.putFloat("portfolio", portfolio);
-            sumaNaPridanie.setText("");
-            poznamka.setText("");
+            editTSumaNaPr.setText("");
+            editTPoznamka.setText("");
             Toast.makeText(getActivity(),"Položka úspešne pridaná.",Toast.LENGTH_SHORT).show();
         }
         else
@@ -227,8 +192,6 @@ public class secondFragment extends Fragment{
         }
         hideSoftKeyboard(getActivity());
     }
-
-
 
     public void saveSuma(String suma)
     {
@@ -282,10 +245,6 @@ public class secondFragment extends Fragment{
         }
     }
 
-
-
-
-
     private void hideSoftKeyboard(Activity activity)
     {
         if (activity.getCurrentFocus() == null) {
@@ -295,6 +254,17 @@ public class secondFragment extends Fragment{
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
+    public void checkNightMode()
+    {
+        udajeUzivatela = this.getActivity().getSharedPreferences(PREFS_NAME,0);
+        editujUdaje = udajeUzivatela.edit();
+        String akyRezim = "";
+        akyRezim = udajeUzivatela.getString("rezim",akyRezim);
+
+        if(akyRezim.equals("n")) {
+            view.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.nightmode));
+        }
+    }
 
 
 }

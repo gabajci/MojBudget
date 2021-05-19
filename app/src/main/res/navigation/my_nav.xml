@@ -6,9 +6,9 @@
     app:startDestination="@id/mainFragment">
     <fragment
         android:id="@+id/secondFragment"
-        android:name="com.example.budgetapp.secondFragment"
+        android:name="com.example.budgetapp.PridajPolozku"
         android:label="fragment_second"
-        tools:layout="@layout/fragment_second" >
+        tools:layout="@layout/fragment_pridajPolozku" >
         <action
             android:id="@+id/action_secondFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -24,7 +24,7 @@
         android:id="@+id/mainFragment"
         android:name="com.example.budgetapp.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
+        tools:layout="@layout/fragment_hlavnyzoznam" >
         <action
             android:id="@+id/action_mainFragment_to_secondFragment"
             app:destination="@id/secondFragment" />
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/nastavenia"
-        android:name="com.example.budgetapp.nastavenia"
+        android:name="com.example.budgetapp.Nastavenia"
         android:label="fragment_nastavenia"
         tools:layout="@layout/fragment_nastavenia" >
         <action
@@ -49,9 +49,9 @@
     </fragment>
     <fragment
         android:id="@+id/statistika"
-        android:name="com.example.budgetapp.statistika"
+        android:name="com.example.budgetapp.Graf"
         android:label="fragment_statistika"
-        tools:layout="@layout/fragment_statistika" >
+        tools:layout="@layout/fragment_graf" >
         <action
             android:id="@+id/action_statistika_to_mainFragment"
             app:destination="@id/mainFragment" />

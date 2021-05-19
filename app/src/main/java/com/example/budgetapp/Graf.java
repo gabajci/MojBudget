@@ -1,12 +1,8 @@
 package com.example.budgetapp;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -19,8 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,47 +25,44 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.budgetapp.MainFragment.PREFS_NAME;
 
+public class Graf extends Fragment {
 
-public class statistika extends Fragment {
+    private View view;
 
     private SharedPreferences udajeUzivatela;
     private SharedPreferences.Editor editujUdaje;
 
-    private Spinner spinner;
-    private AnyChartView graf;
     private ArrayList<String> itemy = new ArrayList<String>();
     private ArrayList<Udaj> udaje = new ArrayList<Udaj>();
 
-    private Button vykonaj;
     private TextView infoGrafText;
+    private Spinner spinnerVyberDat;
+    private RadioGroup rgZnamienkoSumy;
+    private Button btnVykonaj;
 
-    private RadioGroup prijemVydaj;
-    private int prijemVydajInt=1;
-
-    private float[] vstupy = {0,0,0,0,0,0};
+    private AnyChartView graf;
     private Pie pie;
-    private View view;
-    public statistika() {
+
+    private int znamienkoSumy=1; //1 prijem 2 vydaj
+    private float[] vstupy = {0,0,0,0,0,0};
+
+    public Graf() {
         // Required empty public constructor
     }
 
-
-    public static statistika newInstance(String param1, String param2) {
-        statistika fragment = new statistika();
+    public static Graf newInstance(String param1, String param2) {
+        Graf fragment = new Graf();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -96,13 +87,13 @@ public class statistika extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
-        if(id == R.id.item2)
+        if(id == R.id.itemPolozky)
         {
             editujUdaje.putString("stav","nic");
             editujUdaje.commit();
             Navigation.findNavController(view).navigate(R.id.action_statistika_to_mainFragment);
 
-        } else if(id == R.id.item1)
+        } else if(id == R.id.itemNastavenia)
         {
             editujUdaje.putString("stav","nic");
             editujUdaje.commit();
@@ -115,46 +106,43 @@ public class statistika extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_statistika, container, false);
+        view = inflater.inflate(R.layout.fragment_graf, container, false);
+
         infoGrafText = view.findViewById(R.id.infoGrafText);
-        spinner = view.findViewById(R.id.spinner2);
+        spinnerVyberDat = view.findViewById(R.id.spinnerDatum);
+        btnVykonaj= view.findViewById(R.id.btnVykresliGraf);
+        rgZnamienkoSumy = view.findViewById(R.id.groupZnamienko);
+
         graf = view.findViewById(R.id.graf);
 
         pie = AnyChart.pie();
         graf.setChart(pie);
 
-
-
-        vykonaj= view.findViewById(R.id.vykonajB);
-        vykonaj.setOnClickListener(new View.OnClickListener() {
+        btnVykonaj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setupGraph();
             }
         });
 
-
-        prijemVydaj = view.findViewById(R.id.group1);
-        prijemVydaj.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        rgZnamienkoSumy.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                View radioButton = prijemVydaj.findViewById(checkedId);
-                int index = prijemVydaj.indexOfChild(radioButton);
+                View radioButton = rgZnamienkoSumy.findViewById(checkedId);
+                int index = rgZnamienkoSumy.indexOfChild(radioButton);
                 switch (index) {
 
                     case 0:
-                        prijemVydajInt=1;
+                        znamienkoSumy=1;
                         itemy.clear();
                         setSpinner();
                         graf.setVisibility(View.INVISIBLE);
-                        //infoGrafText.setVisibility(View.INVISIBLE);
                         break;
                     case 1:
-                        prijemVydajInt=2;
+                        znamienkoSumy=2;
                         itemy.clear();
                         setSpinner();
                         graf.setVisibility(View.INVISIBLE);
-                        //infoGrafText.setVisibility(View.INVISIBLE);
                         break;
                 }
             }
@@ -163,21 +151,20 @@ public class statistika extends Fragment {
         graf = view.findViewById(R.id.graf);
         graf.setVisibility(View.INVISIBLE);
         infoGrafText.setVisibility(View.INVISIBLE);
+
         setSpinner();
-
         checkNightMode();
-
         return view;
     }
 
     public void setupGraph()
     {
-        if(prijemVydajInt==1)
+        if(znamienkoSumy==1)
         {
-            infoGrafText.setText("Príjem - "+spinner.getSelectedItem().toString());
+            infoGrafText.setText("Príjem - "+spinnerVyberDat.getSelectedItem().toString());
         }
         else {
-            infoGrafText.setText("Výdaj - "+spinner.getSelectedItem().toString());
+            infoGrafText.setText("Výdaj - "+spinnerVyberDat.getSelectedItem().toString());
         }
         String[] months = {"Nezaradené","Výplata","Poplatky","Jedlo","Investície","Voľný čas"};
         refreshGraph();
@@ -203,12 +190,12 @@ public class statistika extends Fragment {
 
         for(int i = 0; i < udaje.size();i++)
         {
-            String znamienkoSumy = udaje.get(i).getSuma().substring(0,1);
-            if((prijemVydajInt==1 && !znamienkoSumy.equals("-"))
-                    || (prijemVydajInt==2 && znamienkoSumy.equals("-")) )
+            String znamienkoSumyStr = udaje.get(i).getSuma().substring(0,1);
+            if((znamienkoSumy==1 && !znamienkoSumyStr.equals("-"))
+                    || (znamienkoSumy==2 && znamienkoSumyStr.equals("-")) )
             {
                 String datum = udaje.get(i).getDatum().substring(3, 10);
-                String datumVIteme = spinner.getSelectedItem().toString();
+                String datumVIteme = spinnerVyberDat.getSelectedItem().toString();
                 if (datum.equals(datumVIteme)) {
 
                     switch (udaje.get(i).getPoznamka().substring(0, 5)) {
@@ -243,11 +230,10 @@ public class statistika extends Fragment {
         }
     }
 
-
     private void setSpinner() {
         refreshItems();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, itemy);
-        spinner.setAdapter(adapter);
+        spinnerVyberDat.setAdapter(adapter);
     }
 
     public void loadUdajeFromStorage() {
@@ -287,14 +273,15 @@ public class statistika extends Fragment {
             }
         }
     }
+
     public void refreshItems()
     {
         loadUdajeFromStorage();
         for(int i = 0; i < udaje.size();i++)
         {
-            String znamienkoSumy = udaje.get(i).getSuma().substring(0,1);
-            if((prijemVydajInt==1 && !znamienkoSumy.equals("-"))
-                    || (prijemVydajInt==2 && znamienkoSumy.equals("-")) )
+            String znamienkoSumyStr = udaje.get(i).getSuma().substring(0,1);
+            if((znamienkoSumy==1 && !znamienkoSumyStr.equals("-"))
+                    || (znamienkoSumy==2 && znamienkoSumyStr.equals("-")) )
             {
                 String datum = udaje.get(i).getDatum().substring(3, 10);
                 boolean pridaj = true;
@@ -311,16 +298,12 @@ public class statistika extends Fragment {
         }
         if(itemy.size()==0) {
             Toast.makeText(getActivity(),"Nenašli sme žiadne položky.",Toast.LENGTH_SHORT).show();
-            vykonaj.setVisibility(View.INVISIBLE);
+            btnVykonaj.setVisibility(View.INVISIBLE);
         }
         else {
-            vykonaj.setVisibility(View.VISIBLE);
+            btnVykonaj.setVisibility(View.VISIBLE);
         }
     }
-
-
-
-
 
     public void checkNightMode()
     {
@@ -334,5 +317,4 @@ public class statistika extends Fragment {
             pie.background().fill("#514E4E");
         }
     }
-
 }

@@ -22,39 +22,27 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 import static com.example.budgetapp.MainFragment.PREFS_NAME;
 
-
-public class nastavenia extends Fragment {
-
+public class Nastavenia extends Fragment {
 
     private View view;
-
+    private TextView vymaz;
     private Switch nocnyR;
 
     private SharedPreferences.Editor editujUdaje;
     private SharedPreferences udajeUzivatela;
-    private TextView vymaz;
 
-    public nastavenia() {
+    public Nastavenia() {
         // Required empty public constructor
     }
 
-
-    public static nastavenia newInstance(String param1, String param2) {
-        nastavenia fragment = new nastavenia();
+    public static Nastavenia newInstance(String param1, String param2) {
+        Nastavenia fragment = new Nastavenia();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -77,26 +65,25 @@ public class nastavenia extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
-        if(id == R.id.item2)
+        if(id == R.id.itemPolozky)
         {
             Navigation.findNavController(view).navigate(R.id.action_nastavenia_to_mainFragment);
 
-        } else if(id == R.id.item3)
+        } else if(id == R.id.itemGraf)
         {
             Navigation.findNavController(view).navigate(R.id.action_nastavenia_to_statistika);
         }
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_nastavenia, container, false);
-        nocnyR = view.findViewById(R.id.switch1);
-        vymaz = view.findViewById(R.id.textView5);
-        checkNightMode();
+
+        nocnyR = view.findViewById(R.id.switchNightMode);
+        vymaz = view.findViewById(R.id.textVymaz);
 
         nocnyR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -114,25 +101,16 @@ public class nastavenia extends Fragment {
                 }
             }
         });
+
         vymaz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialogRemove();
             }
         });
-        return view;
-    }
-    public void checkNightMode()
-    {
-        udajeUzivatela = this.getActivity().getSharedPreferences(PREFS_NAME,0);
-        editujUdaje = udajeUzivatela.edit();
-        String akyRezim = "";
-        akyRezim = udajeUzivatela.getString("rezim",akyRezim);
 
-        if(akyRezim.equals("n")) {
-            view.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.nightmode));
-            nocnyR.setChecked(true);
-        }
+        checkNightMode();
+        return view;
     }
 
     public void dialogRemove()
@@ -156,7 +134,6 @@ public class nastavenia extends Fragment {
         alert.setTitle("Potvrdenie");
         alert.show();
     }
-
 
     public void removeData(){
         ((MainActivity)getActivity()).setUdaje(null);
@@ -192,6 +169,19 @@ public class nastavenia extends Fragment {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public void checkNightMode()
+    {
+        udajeUzivatela = this.getActivity().getSharedPreferences(PREFS_NAME,0);
+        editujUdaje = udajeUzivatela.edit();
+        String akyRezim = "";
+        akyRezim = udajeUzivatela.getString("rezim",akyRezim);
+
+        if(akyRezim.equals("n")) {
+            view.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.nightmode));
+            nocnyR.setChecked(true);
         }
     }
 }

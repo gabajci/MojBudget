@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".statistika">
+    tools:context=".Graf">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -21,10 +21,10 @@
             android:hapticFeedbackEnabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/vykonajB"
+            app:layout_constraintStart_toEndOf="@+id/spinnerDatum"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:ignore="MissingConstraints" >
+            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/infoGrafText"
@@ -34,63 +34,64 @@
         </com.anychart.AnyChartView>
 
         <Spinner
-            android:id="@+id/spinner2"
+            android:id="@+id/spinnerDatum"
             android:layout_width="201dp"
             android:layout_height="46dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.171"
+            app:layout_constraintHorizontal_bias="0.132"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.082" />
+            app:layout_constraintTop_toBottomOf="@+id/groupZnamienko"
+            app:layout_constraintVertical_bias="0.321" />
 
         <Button
-            android:id="@+id/vykonajB"
+            android:id="@+id/btnVykresliGraf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Vykresli"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.186"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.194" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerDatum"
+            app:layout_constraintVertical_bias="0.433" />
 
         <RadioGroup
-            android:id="@+id/group1"
+            android:id="@+id/groupZnamienko"
             android:layout_width="89dp"
             android:layout_height="90dp"
-            android:checkedButton="@id/radioButton"
+            android:checkedButton="@id/rbPrijem"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.902"
+            app:layout_constraintHorizontal_bias="0.197"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.044">
+            app:layout_constraintVertical_bias="0.149">
 
             <RadioButton
-                android:id="@+id/radioButton"
+                android:id="@+id/rbPrijem"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:buttonTint="@color/mygreen"
                 android:text="Príjem" />
 
             <RadioButton
-                android:id="@+id/radioButton4"
+                android:id="@+id/rbVydaj"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:buttonTint="@color/myred"
                 android:text="Výdaj" />
 
         </RadioGroup>
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/textOznam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Vyber si dátum:"
-            app:layout_constraintBottom_toTopOf="@id/spinner2"
+            app:layout_constraintBottom_toTopOf="@id/spinnerDatum"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.258"
+            app:layout_constraintHorizontal_bias="0.184"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
