@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/mainFragment">
+    <fragment
+        android:id="@+id/secondFragment"
+        android:name="com.example.budgetapp.secondFragment"
+        android:label="fragment_second"
+        tools:layout="@layout/fragment_second" >
+        <action
+            android:id="@+id/action_secondFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_secondFragment_to_nastavenia"
+            app:destination="@id/nastavenia" />
+        <action
+            android:id="@+id/action_secondFragment_to_statistika"
+            app:destination="@id/statistika" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.budgetapp.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_secondFragment"
+            app:destination="@id/secondFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_nastavenia"
+            app:destination="@id/nastavenia" />
+        <action
+            android:id="@+id/action_mainFragment_to_statistika"
+            app:destination="@id/statistika" />
+    </fragment>
+    <fragment
+        android:id="@+id/nastavenia"
+        android:name="com.example.budgetapp.nastavenia"
+        android:label="fragment_nastavenia"
+        tools:layout="@layout/fragment_nastavenia" >
+        <action
+            android:id="@+id/action_nastavenia_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_nastavenia_to_statistika"
+            app:destination="@id/statistika" />
+    </fragment>
+    <fragment
+        android:id="@+id/statistika"
+        android:name="com.example.budgetapp.statistika"
+        android:label="fragment_statistika"
+        tools:layout="@layout/fragment_statistika" >
+        <action
+            android:id="@+id/action_statistika_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_statistika_to_nastavenia"
+            app:destination="@id/nastavenia" />
+        <action
+            android:id="@+id/action_statistika_self"
+            app:destination="@id/statistika" />
+    </fragment>
+</navigation>
