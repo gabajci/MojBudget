@@ -26,8 +26,27 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class MainFragment extends Fragment{
-
+/**
+ * Trieda ZoznamPoloziek reprezentuje hlavné menu,
+ * ktoré vypíše zoznam položiek.
+ * @author Adam Ratkovský
+ * @version 1
+ * @date máj 2021
+ */
+public class ZoznamPoloziek extends Fragment{
+    /**
+     * @param view                           pohľad na daný fragment
+     * @param thisContext                    obsahuje premennú kontextu
+     * @param PREFS_NAME                     pomocný String pre SharedPreferencies užívateľa
+     * @param udajeUzivatela                 údaje uživateľa pomocou SharedPreferencies
+     * @param editujUdaje                    editovanie údajov uživateľa
+     * @param udaje                          ArrayList položiek používateľa
+     * @param textPortfolio                  komponent TextView
+     * @param adapterListu                   inštancia UdajListAdapter
+     * @param listPoloziek                   komponent ListView
+     * @param floatingBtnPridajPolozku       komponent FloatingActionButton
+     * @param portfolio                      lokálna premenná portfólia
+     */
     private View view;
     private Context thisContext;
 
@@ -44,14 +63,24 @@ public class MainFragment extends Fragment{
 
     private float portfolio = 0;
 
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
+    /**
+     * New instance zoznam poloziek.
+     *
+     * @param param1 the param 1
+     * @param param2 the param 2
+     * @return the zoznam poloziek
+     */
+    public static ZoznamPoloziek newInstance(String param1, String param2) {
+        ZoznamPoloziek fragment = new ZoznamPoloziek();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public MainFragment() {
+    /**
+     * Instantiates a new Zoznam poloziek.
+     */
+    public ZoznamPoloziek() {
         // Required empty public constructor
     }
 
@@ -108,6 +137,9 @@ public class MainFragment extends Fragment{
         return view;
     }
 
+    /**
+     * Podľa kladnosti portfólia zmení farbu pozadia ViewTextu portfólia.
+     */
     public void refreshPortfolioColor()
     {
         if(Float.parseFloat(textPortfolio.getText().toString()) >0)
@@ -124,6 +156,11 @@ public class MainFragment extends Fragment{
         }
     }
 
+    /**
+     * Volaním metód zisti a vypíše portfólio,
+     * tak isto aj údaje a pomocou triedy UdajListAdapter ich vloží do
+     * komponentu ListView.
+     */
     public void loadData()
     {
         loadSumaFromStorage();
@@ -143,6 +180,9 @@ public class MainFragment extends Fragment{
         listPoloziek.setAdapter(adapterListu);
     }
 
+    /**
+     * Otvorí súbor a načíta údaje, tak isto inicializuje premennú v MainActivity
+     */
     public void loadUdajeFromStorage()
     {
         FileInputStream citac = null;
@@ -187,6 +227,9 @@ public class MainFragment extends Fragment{
         ((MainActivity)getActivity()).setUdaje(this.udaje);
     }
 
+    /**
+     * Otvorí súbor a načíta portfólio, tak isto inicializuje premennú v MainActivity
+     */
     public void loadSumaFromStorage()
     {
         FileInputStream citac = null;
@@ -220,6 +263,10 @@ public class MainFragment extends Fragment{
         }
         ((MainActivity)getActivity()).setSuma(this.portfolio );
     }
+
+    /**
+     * Skontroluje, či je nočný režim, ak áno zmení farbu pozadia.
+     */
     public void checkNightMode()
     {
         udajeUzivatela = this.getActivity().getSharedPreferences(PREFS_NAME,0);

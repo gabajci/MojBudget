@@ -12,11 +12,31 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
+/**
+ * Trieda UdajListAdapter slúži ako adapter pre vykreslenie údajov
+ * v požadovanom layoute-TextViewi
+ * @author -
+ * @version 1
+ * @date apríl 2021
+ */
 public class UdajListAdapter extends ArrayAdapter<Udaj> {
-        private static final String TAG ="UdajListAdapter";
-        private Context mContext;
-        int mResource;
+    /**
+     * @param TAG           pomocný TAG
+     * @param mContext      pomocný kontext
+     * @param mResource     pomocná premenná
+     */
+    private static final String TAG ="UdajListAdapter";
+    private Context mContext;
 
+    int mResource;
+
+    /**
+     * Inicializuje UdajListAdapter
+     *
+     * @param context  the context
+     * @param resource the resource
+     * @param objects  the objects
+     */
     public UdajListAdapter(Context context, int resource,ArrayList<Udaj> objects) {
         super(context, resource, objects);
         this.mContext = context;

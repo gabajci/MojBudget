@@ -26,21 +26,47 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static com.example.budgetapp.MainFragment.PREFS_NAME;
+import static com.example.budgetapp.ZoznamPoloziek.PREFS_NAME;
 
+/**
+ * Trieda Nastavenia pracuje s fragmentom fragment_nastavenia,
+ * môžeme v nej vymazať údaje alebo nastaviť nočný režim.
+ * @author Adam Ratkovský
+ * @version 1
+ * @date máj 2021
+ */
 public class Nastavenia extends Fragment {
-
+    /**
+     * @param view              pohľad na daný fragment
+     * @param udajeUzivatela    údaje uživateľa pomocou SharedPreferencies
+     * @param editujUdaje       editovanie údajov uživateľa
+     * @param vymaz             komponent TextView
+     * @param nocnyR            komponent Switch
+     */
     private View view;
-    private TextView vymaz;
-    private Switch nocnyR;
 
     private SharedPreferences.Editor editujUdaje;
     private SharedPreferences udajeUzivatela;
 
+    private TextView vymaz;
+    private Switch nocnyR;
+
+
+
+    /**
+     * Instantiates a new Nastavenia.
+     */
     public Nastavenia() {
         // Required empty public constructor
     }
 
+    /**
+     * New instance nastavenia.
+     *
+     * @param param1 the param 1
+     * @param param2 the param 2
+     * @return the nastavenia
+     */
     public static Nastavenia newInstance(String param1, String param2) {
         Nastavenia fragment = new Nastavenia();
         Bundle args = new Bundle();
@@ -113,6 +139,9 @@ public class Nastavenia extends Fragment {
         return view;
     }
 
+    /**
+     * Dialog s potvrdením o vymazaní údajov.
+     */
     public void dialogRemove()
     {
         AlertDialog.Builder dial = new AlertDialog.Builder(getActivity());
@@ -135,6 +164,9 @@ public class Nastavenia extends Fragment {
         alert.show();
     }
 
+    /**
+     * Vymaže premenné v aktivity a vymaže obsah súborov.
+     */
     public void removeData(){
         ((MainActivity)getActivity()).setUdaje(null);
         ((MainActivity)getActivity()).setSuma(0.0f);
@@ -172,6 +204,9 @@ public class Nastavenia extends Fragment {
         }
     }
 
+    /**
+     * Skontroluje, či je nočný režim, ak áno zmení farbu pozadia.
+     */
     public void checkNightMode()
     {
         udajeUzivatela = this.getActivity().getSharedPreferences(PREFS_NAME,0);

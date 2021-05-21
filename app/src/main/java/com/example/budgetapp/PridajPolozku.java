@@ -30,12 +30,32 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.example.budgetapp.MainFragment.PREFS_NAME;
+import static com.example.budgetapp.ZoznamPoloziek.PREFS_NAME;
 
+/**
+ * Trieda PridajPolozku pracuje s fragment_pridajpolozku,
+ * podľa zadaných parametrov pridáme do listu položku.
+ *
+ * @author Adam Ratkovský
+ * @version 1
+ * @date máj 2021
+ */
 public class PridajPolozku extends Fragment{
+    /**
+     * @param view                  pohľad na daný fragment
+     * @param udajeUzivatela        údaje uživateľa pomocou SharedPreferencies
+     * @param editujUdaje           editovanie údajov uživateľa
+     * @param editTSumaNaPr         komponent EditText
+     * @param editTPoznamka         komponent EditText
+     * @param spinnerKategorii      komponent Spinner
+     * @param btnPridaj             komponent Button
+     * @param radioBtnPrijem        komponent RadioButton
+     * @param sumaPredPrevratenim   lokálna premenná ako pomocná pri prevrátení obrazovky
+     */
 
     private View view;
 
@@ -50,6 +70,13 @@ public class PridajPolozku extends Fragment{
 
     private float sumaPredPrevratenim;
 
+    /**
+     * New instance pridaj polozku.
+     *
+     * @param param1 the param 1
+     * @param param2 the param 2
+     * @return the pridaj polozku
+     */
     public static PridajPolozku newInstance(String param1, String param2) {
         PridajPolozku fragment = new PridajPolozku();
         Bundle args = new Bundle();
@@ -57,6 +84,9 @@ public class PridajPolozku extends Fragment{
         return fragment;
     }
 
+    /**
+     * Instantiates a new Pridaj polozku.
+     */
     public PridajPolozku() {
         // Required empty public constructor
     }
@@ -143,6 +173,9 @@ public class PridajPolozku extends Fragment{
         return view;
     }
 
+    /**
+     * Nastaví kategórie spinnera a pošle mu ich adaptérom.
+     */
     private void setSpinner() {
         String[] items = new String[]{
                 "Nezaradené","Výplata","Poplatky","Jedlo","Investície","Voľný čas",
@@ -151,6 +184,10 @@ public class PridajPolozku extends Fragment{
         spinnerKategorii.setAdapter(adapter);
     }
 
+    /**
+     * Podľa údajov od užívateľa vytvorí inštancie a volá metódy pre zapísanie
+     * daných údajov do súboru.
+     */
     public void buttonPridaj(){
         if(!editTSumaNaPr.getText().toString().isEmpty()) {
             String minus="";
@@ -193,6 +230,11 @@ public class PridajPolozku extends Fragment{
         hideSoftKeyboard(getActivity());
     }
 
+    /**
+     * Zapíše nové portfólio do súboru.
+     *
+     * @param suma portfólio
+     */
     public void saveSuma(String suma)
     {
         FileOutputStream zapis = null;
@@ -217,6 +259,13 @@ public class PridajPolozku extends Fragment{
         }
     }
 
+    /**
+     * Podľa zadaných parametrov pod seba pridá údaje do súboru.
+     *
+     * @param dat dátum ktorý má zapísať
+     * @param sum sumu ktorú má zapísať
+     * @param po  poznámku ktorú má zapísať
+     */
     public void saveUdaje(String dat,String sum,String po)
     {
         FileOutputStream zapis = null;
@@ -245,6 +294,9 @@ public class PridajPolozku extends Fragment{
         }
     }
 
+    /**
+     * Ak je klávesnica zobrazená, zavrie ju.
+     */
     private void hideSoftKeyboard(Activity activity)
     {
         if (activity.getCurrentFocus() == null) {
@@ -254,6 +306,9 @@ public class PridajPolozku extends Fragment{
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
+    /**
+     * Skontroluje, či je nočný režim, ak áno zmení farbu pozadia.
+     */
     public void checkNightMode()
     {
         udajeUzivatela = this.getActivity().getSharedPreferences(PREFS_NAME,0);

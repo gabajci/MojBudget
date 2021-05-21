@@ -3,6 +3,7 @@ package com.example.budgetapp;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -31,12 +32,35 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.budgetapp.MainFragment.PREFS_NAME;
+import static com.example.budgetapp.ZoznamPoloziek.PREFS_NAME;
 
+/**
+ * Trieda Graf vytvorí graf podľa špecifikácií ktoré zistí z komponentov,
+ * spolupracuje s fragment_graf.
+ * @author Adam Ratkovský
+ * @version 1
+ * @date máj 2021
+ */
 public class Graf extends Fragment {
+    /**
+     * @param view              pohľad na daný fragment
+     * @param udajeUzivatela    údaje uživateľa pomocou SharedPreferencies
+     * @param editujUdaje       editovanie údajov uživateľa
+     * @param itemy             obsahuje list Stringov dátumy ktoré sa vypisujú v spinnery
+     * @param udaje             ArrayList položiek používateľa
+     * @param infoGrafText      komponent TextView
+     * @param spinnerVyberDat   komponent Spinner
+     * @param rgZnamienkoSumy   komponent RadioGroup
+     * @param btnVykonaj        komponent Button
+     * @param graf              komponent AnyChartView (vložený plugin AnyChartView)
+     * @param pie               inštancia Pie- kruhový graf(vložený plugin AnyChartView)
+     * @param znamienkoSumy     pomocná premenná typu integer, 1 označuje príjem a 2 výdaj
+     * @param vstupy            list Floatov, ktorý sa používa pri grafe na sčítanie sumy v danej kategórií
+     */
 
     private View view;
 
@@ -54,13 +78,23 @@ public class Graf extends Fragment {
     private AnyChartView graf;
     private Pie pie;
 
-    private int znamienkoSumy=1; //1 prijem 2 vydaj
+    private int znamienkoSumy=1;
     private float[] vstupy = {0,0,0,0,0,0};
 
+    /**
+     * Instantiates a new Graf.
+     */
     public Graf() {
         // Required empty public constructor
     }
 
+    /**
+     * New instance graf.
+     *
+     * @param param1 the param 1
+     * @param param2 the param 2
+     * @return the graf
+     */
     public static Graf newInstance(String param1, String param2) {
         Graf fragment = new Graf();
         Bundle args = new Bundle();
@@ -89,14 +123,10 @@ public class Graf extends Fragment {
         int id = item.getItemId();
         if(id == R.id.itemPolozky)
         {
-            editujUdaje.putString("stav","nic");
-            editujUdaje.commit();
             Navigation.findNavController(view).navigate(R.id.action_statistika_to_mainFragment);
 
         } else if(id == R.id.itemNastavenia)
         {
-            editujUdaje.putString("stav","nic");
-            editujUdaje.commit();
             Navigation.findNavController(view).navigate(R.id.action_statistika_to_nastavenia);
         }
         return super.onOptionsItemSelected(item);
@@ -157,6 +187,9 @@ public class Graf extends Fragment {
         return view;
     }
 
+    /**
+     * Aktualizuje hodnoty grafu a následne ho vytvorí.
+     */
     public void setupGraph()
     {
         if(znamienkoSumy==1)
@@ -179,6 +212,9 @@ public class Graf extends Fragment {
         infoGrafText.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Aktualizuje hodnoty premennej vstupy pre použitie v grafe.
+     */
     private void refreshGraph()
     {
         for(int i = 0; i< 6;i++)
@@ -230,12 +266,18 @@ public class Graf extends Fragment {
         }
     }
 
+    /**
+     * Aktualizuje údaje ktoré vstupujú do spinnera a následne ich do neho pošle.
+     */
     private void setSpinner() {
         refreshItems();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, itemy);
         spinnerVyberDat.setAdapter(adapter);
     }
 
+    /**
+     * Otvorí súbor a načíta z neho udaje, vloží ich do lokálnej premennej údaje.
+     */
     public void loadUdajeFromStorage() {
         FileInputStream citac = null;
 
@@ -274,9 +316,13 @@ public class Graf extends Fragment {
         }
     }
 
+    /**
+     * Aktualizuje lokálnu premennú ktorá obsahuje dostupné dátumy podľa zvoleného RadioGroup tlačidla.
+     */
     public void refreshItems()
     {
         loadUdajeFromStorage();
+
         for(int i = 0; i < udaje.size();i++)
         {
             String znamienkoSumyStr = udaje.get(i).getSuma().substring(0,1);
@@ -305,6 +351,9 @@ public class Graf extends Fragment {
         }
     }
 
+    /**
+     * Skontroluje, či je nočný režim, ak áno zmení farbu pozadia.
+     */
     public void checkNightMode()
     {
         udajeUzivatela = this.getActivity().getSharedPreferences(PREFS_NAME,0);

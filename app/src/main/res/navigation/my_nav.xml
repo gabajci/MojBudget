@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.budgetapp.MainFragment"
+        android:name="com.example.budgetapp.ZoznamPoloziek"
         android:label="fragment_main"
         tools:layout="@layout/fragment_hlavnyzoznam" >
         <action
